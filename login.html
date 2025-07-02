@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Inventori</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+
+<body id="halamanLogin" class="d-flex align-items-center py-4 bg-body-tertiary">
+
+    <main class="form-signin w-100 m-auto text-center">
+        <h1 class="h3 mb-3 fw-normal">Inventory Login</h1>
+
+        <div class="form-floating">
+            <input type="text" class="form-control" id="usernameInput" placeholder="Masukkan Username">
+            <label for="usernameInput">Username</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+            <label for="passwordInput">Password</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2" type="button" id="loginBtn" onclick="login()">Login</button>
+        <p class="mt-5 mb-3 text-danger" id="pesanError"></p>
+    </main>
+
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        localStorage.removeItem("token")
+        function login() {
+            $api.post('', {
+                login:true,
+                username: usernameInput.value,
+                password: passwordInput.value
+            }).then((respon) => {
+                if(respon.data.status == true) {
+                    localStorage.setItem("token", respon.data.token)
+                    window.location.assign("index.html")
+                }
+                pesanError.innerHTML = respon.data.msg
+            })
+        }
+    </script>
+
+</body>
+
+</html>

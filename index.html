@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barang Inventory</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-4">Inventory</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link active" aria-current="page">
+                    <i class="bi bi-speedometer me-2"></i> Barang
+                </a>
+            </li>
+            <li>
+                <a href="supplier.html" class="nav-link text-white">
+                    <i class="bi bi-truck me-2"></i>
+                    Supplier
+                </a>
+            </li>
+            <li>
+                <a href="masuk.html" class="nav-link text-white">
+                    <i class="bi bi-box-arrow-in-down-left me-2"></i>
+                    Stok Masuk
+                </a>
+            </li>
+            <li>
+                <a href="keluar.html" class="nav-link text-white">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>
+                    Stok Keluar
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <strong>Admin</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <main class="konten">
+        <div class="container p-2">
+            <div class="card">
+                <div class="card-header">
+                    Menampilkan Data Barang
+                </div>
+                <div class="card-body">
+                    <button onclick="addBarang()" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addEditBarang">+ Tambah
+                        Barang</button>
+                    <div class="table-responsive mt-3">
+                        <table id="tabelBarang" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Kode Barang</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Satuan</th>
+                                    <th scope="col">Supplier</th>
+                                    <th scope="col">Stok</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addEditBarang" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="judulModal">Tambah Barang</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="kodeBarang" placeholder="name@example.com">
+                        <label for="kodeBarang">Kode Barang</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="namaBarang" placeholder="name@example.com">
+                        <label for="namaBarang">Nama Barang</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="satuanBarang" placeholder="name@example.com">
+                        <label for="satuanBarang">Satuan Barang</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="supplierBarang" aria-label="Floating label select example">
+                         
+                        </select>
+                        <label for="supplierBarang">Nama Supplier</label>
+                      </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="stokBarang" placeholder="name@example.com">
+                        <label for="stokBarang">Stok Barang</label>
+                    </div>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanBarang()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script src="assets/js/jquery-3.7.0.js"></script>
+    <script src="assets/js/dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        var tabel = new DataTable('#tabelBarang');
+        var editedIndex = null
+
+
+        var data_supplier = []
+        var data_barang = []
+
+        $api.post('', {
+            readSupplier: true
+        }).then((respon) => {
+            if (respon.data.status == true) {
+                console.log(respon.data.supplier)
+                data_supplier = respon.data.supplier
+                opsiSupplierBarang()
+                getDataBarang()
+            }
+        })
+
+        function getDataBarang() {
+            $api.post('', {
+                readBarang: true
+            }).then((respon) => {
+                if (respon.data.status == true) {
+                    data_barang = respon.data.barang
+                    loadDataBarang()
+                }
+            })
+        }
+
+        function loadDataBarang() {
+            tabel.clear()
+            tabel.destroy()
+            var isi_tabel = document.querySelector("#tabelBarang tbody")
+            isi_tabel.innerHTML = ""
+            data_barang.forEach((item, index) => {
+                isi_tabel.innerHTML += `<tr>
+                                    <th scope="row">${index + 1}</th>
+                                    <td>${item.kode_barang}</td>
+                                    <td>${item.nama_barang}</td>
+                                    <td>${item.satuan_barang}</td>
+                                    <td>${getNamaSupplier(item.id_supplier_barang)}</td>
+                                    <td>${item.stok_barang}</td>
+                                    <td>
+                                        <button data-bs-toggle="modal" data-bs-target="#addEditBarang"
+                                            onclick="ubahBarang(${index})" class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2"
+                                            onclick="hapusBarang(${index})">Hapus</button>
+                                    </td>
+                                </tr>`
+            })
+            tabel = new DataTable('#tabelBarang');
+        }
+
+        function addBarang() {
+            editedIndex = null
+            judulModal.innerHTML = "Tambah Data Barang"
+            kodeBarang.value = ""
+            namaBarang.value = ""
+            satuanBarang.value = ""
+            supplierBarang.value = ""
+            stokBarang.value = ""
+        }
+
+        function ubahBarang(index) {
+            editedIndex = index
+            judulModal.innerHTML = "Ubah Data Barang"
+            kodeBarang.value = data_barang[index].kode_barang
+            namaBarang.value = data_barang[index].nama_barang
+            satuanBarang.value = data_barang[index].satuan_barang
+            supplierBarang.value = data_barang[index].id_supplier_barang
+            stokBarang.value = data_barang[index].stok_barang
+        }
+
+        function simpanBarang() {
+            let where = {
+                id_barang: 0
+            }
+            if(editedIndex != null) where.id_barang = data_barang[editedIndex].id_barang
+            let data = {
+                kode_barang: kodeBarang.value,
+                nama_barang: namaBarang.value,
+                satuan_barang: satuanBarang.value,
+                id_supplier_barang: supplierBarang.value,
+                stok_barang: stokBarang.value
+            }
+            $api.post('', {
+                addEditBarang: true,
+                where: where,
+                data: data
+            }).then((respon) => {
+                console.log(respon.data)
+                alert(respon.data.msg)
+                if (respon.data.status == true) {
+
+                    if (editedIndex != null) {
+                        data_barang[editedIndex].kode_barang = respon.data.barang.kode_barang
+                        data_barang[editedIndex].nama_barang = respon.data.barang.nama_barang
+                        data_barang[editedIndex].satuan_barang = respon.data.barang.satuan_barang
+                        data_barang[editedIndex].id_supplier_barang = respon.data.barang.id_supplier_barang
+                        data_barang[editedIndex].stok_barang = respon.data.barang.stok_barang
+                    } else {
+                        data_barang.push(respon.data.barang)
+                    }
+                    loadDataBarang()
+                    bootstrap.Modal.getInstance(addEditBarang).hide()
+                }
+            })
+        }
+
+        function hapusBarang(index) {
+            var konfirmasi = confirm("Yakin akan menghapus data?")
+            if (konfirmasi) {
+                var id = data_barang[index].id_barang
+                $api.post('', {
+                    deleteBarang: true,
+                    id_barang: id,
+                }).then((respon) => {
+                    console.log(respon.data)
+                    alert(respon.data.msg)
+                    if (respon.data.status == true) {
+                        data_barang.splice(index, 1)
+                        loadDataBarang()
+                    }
+                })
+            }
+        }
+
+        function getNamaSupplier(id) {
+            var supplier = data_supplier.find((item) => {
+                return item.id_supplier == id
+            })
+            return supplier.nama_supplier
+        }
+        function opsiSupplierBarang() {
+            supplierBarang.innerHTML = `<option selected disabled>Pilih Supplier</option>`
+            data_supplier.forEach(item => {
+                supplierBarang.innerHTML += `<option value="${item.id_supplier}">${item.nama_supplier}</option>`
+            }) 
+        }
+    </script>
+
+</body>
+
+</html>

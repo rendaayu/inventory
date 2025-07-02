@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Inventory</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-4">Inventory</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link text-white" aria-current="page">
+                    <i class="bi bi-speedometer me-2"></i> Barang
+                </a>
+            </li>
+            <li>
+                <a href="supplier.html" class="nav-link active">
+                    <i class="bi bi-truck me-2"></i>
+                    Supplier
+                </a>
+            </li>
+            <li>
+                <a href="masuk.html" class="nav-link text-white">
+                    <i class="bi bi-box-arrow-in-down-left me-2"></i>
+                    Stok Masuk
+                </a>
+            </li>
+            <li>
+                <a href="keluar.html" class="nav-link text-white">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>
+                    Stok Keluar
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <strong>Admin</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <main class="konten">
+        <div class="container p-2">
+            <div class="card">
+                <div class="card-header">
+                    Menampilkan Data Supplier
+                </div>
+                <div class="card-body">
+                    <button onclick="addSupplier()" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addEditSupplier">+ Tambah
+                        Supplier</button>
+                    <div class="table-responsive mt-3">
+                        <table id="tabelSupplier" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Telp</th>
+                                    <th scope="col">Alamat</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>CV. Inter Digital Solutions</td>
+                                    <td>021 58795112</td>
+                                    <td class="tabel-alamat">Komplek 25 a 1, Jl. Jemb. 3 Raya, RT.2/RW.11, Pejagalan,
+                                        Penjaringan, North Jakarta City, Jakarta 14450</td>
+                                    <td>
+                                        <button data-bs-toggle="modal" data-bs-target="#addEditSupplier"
+                                            onclick="ubahSupplier()" class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2"
+                                            onclick="hapusSupplier()">Hapus</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>PT. Nusantara Jaya</td>
+                                    <td>021 662544825</td>
+                                    <td class="tabel-alamat">Susukan, Kec. Ciracas, Kota Jakarta Timur, Daerah Khusus
+                                        Ibukota Jakarta 13750</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2">Hapus</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>PT. Bintang Mas</td>
+                                    <td>021 53554486</td>
+                                    <td class="tabel-alamat">Jl. Jatinegara Bar. No.124, RT.7/RW.1, Bali Mester,
+                                        Kecamatan Jatinegara, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13320
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2">Hapus</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td>PT. Tekno Maju</td>
+                                    <td>081290465033</td>
+                                    <td class="tabel-alamat">Jalan Makdiasa Superman Siasan Siantar Banding 11540</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2">Hapus</button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addEditSupplier" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="judulModal">Tambah Supplier</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="namaSupplierInput" placeholder="name@example.com">
+                        <label for="namaSupplierInput">Nama Supplier</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="telpSupplierInput" placeholder="name@example.com">
+                        <label for="telpSupplierInput">Telp Supplier</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" style="height: 100px" placeholder="Leave a comment here"
+                            id="alamatSupplierInput"></textarea>
+                        <label for="alamatSupplierInput">Alamat</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanSupplier()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script src="assets/js/jquery-3.7.0.js"></script>
+    <script src="assets/js/dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        var tabel = new DataTable('#tabelSupplier');
+        var idEdit = 0
+
+
+        var data_supplier = []
+
+        $api.post('', {
+            readSupplier: true
+        }).then((respon) => {
+            if (respon.data.status == true) {
+                console.log(respon.data.supplier)
+                data_supplier = respon.data.supplier
+                loadDataSupplier()
+            }
+        })
+
+
+        function loadDataSupplier() {
+            tabel.clear()
+            tabel.destroy()
+            var isi_tabel = document.querySelector("#tabelSupplier tbody")
+            isi_tabel.innerHTML = ""
+            data_supplier.forEach((item, index) => {
+                isi_tabel.innerHTML += `<tr>
+                                    <th scope="row">${index + 1}</th>
+                                    <td>${item.nama_supplier}</td>
+                                    <td>${item.telp_supplier}</td>
+                                    <td class="tabel-alamat">${item.alamat_supplier}</td>
+                                    <td>
+                                        <button data-bs-toggle="modal" data-bs-target="#addEditSupplier"
+                                            onclick="ubahSupplier(${item.id_supplier}, ${index})" class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2"
+                                            onclick="hapusSupplier(${index})">Hapus</button>
+                                    </td>
+                                </tr>`
+            })
+            tabel = new DataTable('#tabelSupplier');
+        }
+
+        function addSupplier() {
+            idEdit = 0
+            judulModal.innerHTML = "Tambah Supplier"
+            namaSupplierInput.value = ""
+            telpSupplierInput.value = ""
+            alamatSupplierInput.value = ""
+        }
+
+        var indexEdit = 0
+
+        function ubahSupplier(id, index) {
+            idEdit = id
+            indexEdit = index
+            judulModal.innerHTML = "Ubah Data Supplier"
+            namaSupplierInput.value = data_supplier[index].nama_supplier
+            telpSupplierInput.value = data_supplier[index].telp_supplier
+            alamatSupplierInput.value = data_supplier[index].alamat_supplier
+        }
+
+        function hapusSupplier(index) {
+            var konfirmasi = confirm("Yakin akan menghapus data? Supplier yang memiliki barang, tidak bisa dihapus!")
+            if (konfirmasi) {
+                var id = data_supplier[index].id_supplier
+                $api.post('', {
+                    deleteSupplier: true,
+                    id_supplier: id,
+                }).then((respon) => {
+                    console.log(respon.data)
+                    alert(respon.data.msg)
+                    if (respon.data.status == true) {
+                        data_supplier.splice(index, 1)
+                        loadDataSupplier()
+
+                    }
+                })
+            }
+        }
+
+        function simpanSupplier() {
+            $api.post('', {
+                addEditSupplier: true,
+                nama_supplier: namaSupplierInput.value,
+                telp_supplier: telpSupplierInput.value,
+                alamat_supplier: telpSupplierInput.value,
+                id_edit: idEdit
+            }).then((respon) => {
+                console.log(respon.data)
+                alert(respon.data.msg)
+                if (respon.data.status == true) {
+
+                    if (idEdit != 0) {
+                        data_supplier[indexEdit].nama_supplier = respon.data.supplier.nama_supplier
+                        data_supplier[indexEdit].telp_supplier = respon.data.supplier.telp_supplier
+                        data_supplier[indexEdit].alamat_supplier = respon.data.supplier.alamat_supplier
+                    } else {
+                        data_supplier.push(respon.data.supplier)
+                    }
+                    loadDataSupplier()
+                    bootstrap.Modal.getInstance(addEditSupplier).hide()
+                }
+            })
+        }
+    </script>
+
+</body>
+
+</html>

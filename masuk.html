@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Masuk Inventory</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-4">Inventory</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link text-white" aria-current="page">
+                    <i class="bi bi-speedometer me-2"></i> Barang
+                </a>
+            </li>
+            <li>
+                <a href="supplier.html" class="nav-link text-white">
+                    <i class="bi bi-truck me-2"></i>
+                    Supplier
+                </a>
+            </li>
+            <li>
+                <a href="masuk.html" class="nav-link active">
+                    <i class="bi bi-box-arrow-in-down-left me-2"></i>
+                    Stok Masuk
+                </a>
+            </li>
+            <li>
+                <a href="keluar.html" class="nav-link text-white">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>
+                    Stok Keluar
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <strong>Admin</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="login.html">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <main class="konten">
+        <div class="container p-2">
+            <div class="card">
+                <div class="card-header">
+                    Menampilkan Informasi Stok Masuk
+                </div>
+                <div class="card-body">
+                    <button onclick="addMasuk()" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addEditMasuk">+ Tambah
+                        Stok Masuk</button>
+                    <div class="table-responsive mt-3">
+                        <table id="tabelMasuk" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Kode Faktur</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Qty Stock</th>
+                                    <th scope="col">Qty Masuk</th>
+                                    <th scope="col">End Stok</th>
+                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addEditMasuk" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="judulModal">Tambah Stok Masuk</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="kodeFaktur" placeholder="name@example.com">
+                        <label for="kodeFaktur">Kode Faktur</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select onchange="tampilkanStok()" class="form-select" id="idBarang" aria-label="Floating label select example">
+                                </select>
+                                <label for="idBarang">Nama Barang</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="tanggalMasuk" placeholder="name@example.com">
+                                <label for="tanggalMasuk">Tanggal Masuk</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                <input onchange="tampilkanStok()" type="number" class="form-control" id="stokMasuk" placeholder="name@example.com">
+                                <label for="stokMasuk">Stok Masuk</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                <input onchange="tampilkanStok()" type="number" class="form-control" id="stokAwal" placeholder="name@example.com">
+                                <label for="stokAwal">Stok Awal</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating mb-3">
+                                <input readonly type="number" class="form-control" id="endStock" placeholder="name@example.com">
+                                <label for="endStock">End Stock</label>
+                            </div>
+                        </div>
+                    </div>
+                  
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanMasuk()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script src="assets/js/jquery-3.7.0.js"></script>
+    <script src="assets/js/dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        var tabel = new DataTable('#tabelMasuk');
+        var editedIndex = null
+
+        var data_barang = []
+        var data_masuk = []
+
+        $api.post('', {
+            readMasuk: true
+        }).then((respon) => {
+            if (respon.data.status == true) {
+                console.log(respon.data.supplier)
+                data_barang = respon.data.barang
+                data_masuk = respon.data.masuk
+                opsiBarang()
+                loadDataMasuk()
+            }
+        })
+
+        function loadDataMasuk() {
+            tabel.clear()
+            tabel.destroy()
+            var isi_tabel = document.querySelector("#tabelMasuk tbody")
+            isi_tabel.innerHTML = ""
+            data_masuk.forEach((item, index) => {
+                isi_tabel.innerHTML += `<tr>
+                                    <th scope="row">${index + 1}</th>
+                                    <td>${item.kode_faktur}</td>
+                                    <td>${item.nama_barang}</td>
+                                    <td>${item.stok_awal}</td>
+                                    <td>${item.stok_masuk}</td>
+                                    <td>${item.stok_masuk * 1 + item.stok_awal * 1}</td>
+                                    <td>${item.tanggal}</td>
+                                    <td>
+                                        <button data-bs-toggle="modal" data-bs-target="#addEditMasuk"
+                                            onclick="ubahMasuk(${index})" class="btn btn-sm btn-warning me-2">Ubah</button>
+                                        <button class="btn btn-sm btn-danger me-2"
+                                            onclick="hapusMasuk(${index})">Hapus</button>
+                                    </td>
+                                </tr>`
+            })
+            tabel = new DataTable('#tabelMasuk');
+        }
+
+        function addMasuk() {
+            editedIndex = null
+            judulModal.innerHTML = "Tambah Stok Masuk"
+            kodeFaktur.value = ""
+            idBarang.value = ""
+            tanggalMasuk.value = ""
+            stokMasuk.value = 0
+            //stokAwal.setAttribute("readonly", true)
+            stokAwal.value = 0
+            endStock.value = 0
+        }
+
+        function ubahMasuk(index) {
+            editedIndex = index
+            judulModal.innerHTML = "Ubah Stok Masuk"
+            kodeFaktur.value = data_masuk[index].kode_faktur
+            idBarang.value = data_masuk[index].id_barang
+            tanggalMasuk.value = data_masuk[index].tanggal
+            stokMasuk.value = data_masuk[index].stok_masuk
+            stokAwal.removeAttribute("readonly")
+            stokAwal.value = data_masuk[index].stok_awal
+            endStock.value = stokAwal.value * 1 + stokMasuk.value * 1
+        }
+
+        function simpanMasuk() {
+            let where = {
+                id_masuk: 0
+            }
+            if (editedIndex != null) where.id_masuk = data_masuk[editedIndex].id_masuk
+            let data = {
+                kode_faktur: kodeFaktur.value,
+                id_barang: idBarang.value,
+                tanggal: tanggalMasuk.value,
+                stok_masuk: stokMasuk.value,
+                stok_awal: stokAwal.value
+            }
+            $api.post('', {
+                addEditMasuk: true,
+                where: where,
+                data: data,
+                nama_barang:idBarang.options[idBarang.selectedIndex].innerHTML
+            }).then((respon) => {
+                console.log(respon.data)
+                alert(respon.data.msg)
+                if (respon.data.status == true) {
+
+                    if (editedIndex != null) {
+                        data_masuk[editedIndex].kode_faktur = respon.data.masuk.kode_faktur
+                        data_masuk[editedIndex].id_barang = respon.data.masuk.id_barang
+                        data_masuk[editedIndex].tanggal = respon.data.masuk.tanggal
+                        data_masuk[editedIndex].stok_masuk = respon.data.masuk.stok_masuk
+                        data_masuk[editedIndex].stok_awal = respon.data.masuk.stok_awal
+                        data_masuk[editedIndex].nama_barang = respon.data.masuk.nama_barang
+                    } else {
+                        data_masuk.push(respon.data.masuk)
+                        data_barang = respon.data.barang
+                    }
+                    loadDataMasuk()
+                    bootstrap.Modal.getInstance(addEditMasuk).hide()
+                }
+            })
+        }
+
+        function hapusMasuk(index) {
+            var konfirmasi = confirm("Yakin akan menghapus data masuk?")
+            if (konfirmasi) {
+                var id = data_masuk[index].id_masuk
+                $api.post('', {
+                    deleteMasuk: true,
+                    id_masuk: id,
+                    id_barang:data_masuk[index].id_barang
+                }).then((respon) => {
+                    console.log(respon.data)
+                    alert(respon.data.msg)
+                    if (respon.data.status == true) {
+                        data_masuk.splice(index, 1)
+                        loadDataMasuk()
+                    }
+                })
+            }
+        }
+
+        
+        function opsiBarang() {
+            idBarang.innerHTML = `<option selected disabled>Pilih Barang</option>`
+            data_barang.forEach(item => {
+                idBarang.innerHTML += `<option value="${item.id_barang}">${item.nama_barang}</option>`
+            })
+        }
+
+        function tampilkanStok() {
+            var pilihan = idBarang.value
+            let index = data_barang.findIndex(item => item.id_barang == pilihan)
+            if(editedIndex === null) {
+                stokAwal.value = data_barang[index].stok_barang * 1
+            }
+            endStock.value = stokAwal.value * 1 + stokMasuk.value * 1
+        }
+ 
+       
+    </script>
+
+</body>
+
+</html>
